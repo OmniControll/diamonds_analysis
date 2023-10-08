@@ -22,17 +22,7 @@ diamonds = pd.read_csv('diamonds.csv')
 
 # So what do we want to know about this data?
 
-# 1. What is the distribution of the diamond prices?
-# 2. What is the distribution of the diamond carats?
-# 3. What is the distribution of the diamond cut?
-# 4. What is the distribution of the diamond color?
-# 5. What is the distribution of the diamond clarity?
-# 6. What is the relationship between price and carat?
-# 7. What is the relationship between price and cut?
-# 8. What is the relationship between price and color?
-# 9. What is the relationship between price and clarity?
-# 10. What is the relationship between price and depth?
-
+# We'll check the distributions of the numeric features and see if there are any outliers.
 # we can use the dimensions to calculate the volume of the diamond and use that as a feature.
 # we can also use the dimensions to calculate the density of the diamond and use that as a feature.
 
@@ -65,3 +55,4 @@ plt.yticks(np.arange(0, 10000, step=1000))
 plt.xlabel('Carat')
 plt.ylabel('Nr of Diamonds')
 plt.show()
+
