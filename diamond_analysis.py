@@ -44,18 +44,25 @@ print(diamonds.isnull().sum())
 #lets make the price labels more readable by adding more markers on the plot using seaborn
 
 sns.histplot(diamonds['price'], bins=50)
-plt.xticks(np.arange(0, 20000, step=1000))  # steps of 1000 dollars
-plt.yticks(np.arange(0, 10000, step=1000)) 
-plt.xlabel('Price in Dollars')
-plt.ylabel('Nr of Diamonds') 
+plt.grid(axis='y', linestyle='--', linewidth=0.7, alpha=0.7)
+mean_val = diamonds['price'].mean() # calculate mean value
+plt.axvline(mean_val, color='r', linestyle='--')
+plt.text(15000, 3000, 'Mean: {:.2f}'.format(mean_val), bbox=dict(facecolor='red', alpha=0.5)) # include mean value in the plot
+plt.xlabel('Price')
+plt.ylabel('Nr of Diamonds')
+plt.title('Distribution of Diamond Prices')
 plt.show()
+
 
 #histogram of carat
 sns.histplot(diamonds['carat'], bins=50)
-plt.xticks(np.arange(0, 6, step=0.5))  # steps of 0.5 carat
-plt.yticks(np.arange(0, 15000, step=3000))
+plt.grid(axis='y', linestyle='--', linewidth=0.7, alpha=0.7)
+mean_val = diamonds['carat'].mean() # calculate mean value
+plt.axvline(mean_val, color='r', linestyle='--')
+plt.text(3, 3000, 'Mean: {:.2f}'.format(mean_val), bbox=dict(facecolor='red', alpha=0.5)) # include mean value in the plot
 plt.xlabel('Carat')
 plt.ylabel('Nr of Diamonds')
+plt.title('Distribution of Diamond Carats')
 plt.show()
 
 #there are some outliers in the carat feature. we can remove them by removing the rows with carat > 3
@@ -64,12 +71,16 @@ plt.show()
 #in linear regression, outliers can affect the model's performance. so we'll apply random forest regressor instead later on.
 
 #distribution of depth
-sns.histplot(diamonds['depth'], bins=50)
-plt.xticks(np.arange(50, 80, step=5))  # steps of 5
-plt.yticks(np.arange(0, 15000, step=2500))
-plt.xlabel('Depth')
+sns.histplot(diamonds['depth'], bins=50, color='skyblue', kde=True)
+plt.grid(axis='y', linestyle='--', linewidth=0.7, alpha=0.7)
+mean_val = diamonds['depth'].mean() # calculate mean value
+plt.axvline(mean_val, color='r', linestyle='--')
+plt.text(62, 3000, 'Mean: {:.2f}'.format(mean_val), bbox=dict(facecolor='red', alpha=0.5)) # include mean value in the plot
+plt.xlabel('Depth of Diamonds')
 plt.ylabel('Nr of Diamonds')
+plt.title('Distribution of Diamond Depths')
 plt.show()
+
 
 #distribution of table
 sns.histplot(diamonds['table'], bins=35)
