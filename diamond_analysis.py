@@ -7,6 +7,26 @@ import matplotlib.pyplot as plt
 
 diamonds = pd.read_csv('diamonds.csv')
 
+# turn to pandas dataframe
+diamonds = pd.DataFrame(diamonds)
+# info
+print(diamonds.info())
+
+# some of our columns contain byte strings, we'll need to convert them to strings.
+# we'll also need to convert the categorical features to strings.
+diamonds['cut'] = diamonds['cut'].astype(str)
+diamonds['color'] = diamonds['color'].astype(str)
+diamonds['clarity'] = diamonds['clarity'].astype(str)
+
+# fix byte strings
+diamonds['cut'] = diamonds['cut'].str.replace("b'", '')
+diamonds['cut'] = diamonds['cut'].str.replace("'", '')
+diamonds['color'] = diamonds['color'].str.replace("b'", '')
+diamonds['color'] = diamonds['color'].str.replace("'", '')
+diamonds['clarity'] = diamonds['clarity'].str.replace("b'", '')
+diamonds['clarity'] = diamonds['clarity'].str.replace("'", '')
+
+
 # Business Question: 
 # How do the physical attributes and quality grades of a diamond relate to its market price, 
 # can we accurately predict the price of a diamond based on these features?"
@@ -40,6 +60,34 @@ print(diamonds.describe())
 #check for nulls
 print(diamonds.isnull().sum())
 
+# we're going to need to clean the data a bit before we can use it.
+# we'll rename some columns to make them more readable.
+#rename columns
+diamonds.rename(columns={"'x'": 'length', "'y'": 'width', "'z'": 'height'}, inplace=True)
+print(diamonds.head())
+
+print(diamonds['clarity'].unique())
+print(diamonds['color'].unique())
+
+# rename the clarity values to make them more readable
+diamonds['clarity'] = diamonds['clarity'].astype(str)
+diamonds['clarity'].replace({'I1': 'Included', 'SI2': 'Slightly Included', 'SI1': 'Slightly Included',
+                                'VS2': 'Very Slightly Included', 'VS1': 'Very Slightly Included',
+                                'VVS2': 'Very Very Slightly Included-2', 'VVS1': 'Very Very Slightly Included-1',
+                                'IF': 'Internally Flawless'}, inplace=True)
+
+#rename the color values to make them more readable, and group them into colorless and near colorless
+# the colorless is distinguished by the letters D, E and F, and the near colorless is distinguished by the letters G, H, I and J.
+# it ranges from D (best) to J (worst), we'll try to make that apparent in the plot.
+diamonds['color'] = diamonds['color'].astype(str)
+diamonds['color'].replace({'D': 'D-Colorless', 'E': 'E-Colorless', 'F': 'F-Colorless',
+                            'G': 'G-Near Colorless', 'H': 'H-Near Colorless', 'I': 'I-Near Colorless', 'J': 'J-Near Colorless'}, inplace=True)
+
+print(diamonds['clarity'].unique())
+print(diamonds['color'].unique())
+
+diamonds.head()
+
 #checking distributions of numeric features
 #lets make the price labels more readable by adding more markers on the plot using seaborn
 
@@ -48,7 +96,7 @@ plt.grid(axis='y', linestyle='--', linewidth=0.7, alpha=0.7)
 mean_val = diamonds['price'].mean() # calculate mean value
 plt.axvline(mean_val, color='r', linestyle='--')
 plt.text(15000, 3000, 'Mean: {:.2f}'.format(mean_val), bbox=dict(facecolor='red', alpha=0.5)) # include mean value in the plot
-plt.xlabel('Price')
+plt.xlabel('Price ($)')
 plt.ylabel('Nr of Diamonds')
 plt.title('Distribution of Diamond Prices')
 plt.show()
@@ -70,10 +118,13 @@ plt.show()
 #But considering we're dealing with luxury products, it's not surprising to have some outliers representing rare cases. so we'll keep them.
 #in linear regression, outliers can affect the model's performance. so we'll apply random forest regressor instead later on.
 
+
 #distribution of depth
 sns.histplot(diamonds['depth'], bins=50, color='skyblue', kde=True)
 plt.grid(axis='y', linestyle='--', linewidth=0.7, alpha=0.7)
 mean_val = diamonds['depth'].mean() # calculate mean value
+print("Mean_val type:", type(mean_val))
+print("Mean_val value:", mean_val)
 plt.axvline(mean_val, color='r', linestyle='--')
 plt.text(62, 3000, 'Mean: {:.2f}'.format(mean_val), bbox=dict(facecolor='red', alpha=0.5)) # include mean value in the plot
 plt.xlabel('Depth of Diamonds')
@@ -115,3 +166,10 @@ plt.ylabel('Nr of Diamonds')
 plt.show()
 
 
+#checking unique combinations 
+print(diamonds.groupby(['cut', 'color', 'clarity']).size())
+
+# 276 unique combinations, this implies that we have 276 different types of diamonds in our data.
+
+print(diamonds.groupby(['color', 'clarity']).size().sort_values(ascending=False)) 
+# the most common diamond is a G-Near Colorless with a clarity of Slightly Included.
