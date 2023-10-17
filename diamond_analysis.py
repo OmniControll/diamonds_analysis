@@ -88,83 +88,78 @@ print(diamonds['color'].unique())
 
 diamonds.head()
 
+fig, axes = plt.subplots(nrows=3, ncols=3, figsize=(20, 15)) 
+
+# Flattening the array of axes for easy indexing
+axes = axes.flatten()
+
+numeric_feats = ['carat', 'depth', 'table', 'price', 'length', 'width']
+category_feats = ['cut', 'color', 'clarity']
+
+all_feats = numeric_feats + category_feats  # Merging both lists
+#define cut order
+cut_order = ['Fair', 'Good', 'Very Good', 'Premium', 'Ideal']
+#define color order
+color_order = ['D-Colorless', 'E-Colorless', 'F-Colorless', 'G-Near Colorless', 'H-Near Colorless', 'I-Near Colorless', 'J-Near Colorless']
+#define clarity order
+clarity_order = ['Included', 'Slightly Included', 'Very Slightly Included', 'Very Very Slightly Included-2', 'Very Very Slightly Included-1', 'Internally Flawless']
+
+# Looping through all features and plotting
+for i, feature in enumerate(all_feats):
+    ax = axes[i]
+    
+    if feature in numeric_feats:
+        sns.histplot(diamonds[feature], bins=50, ax=ax, color='skyblue', kde=True)
+        ax.grid(axis='y', linestyle='--', linewidth=0.7, alpha=0.7)
+        mean_val = diamonds[feature].mean()
+        ax.axvline(mean_val, color='r', linestyle='--')
+        ax.text(mean_val + 0.05, ax.get_ylim()[1] * 0.8, 'Mean: {:.2f}'.format(mean_val), bbox=dict(facecolor='red', alpha=0.5))
+    else:
+        #sorting the 'cut' feature by quality
+        if feature == 'cut':
+            sns.countplot(x=feature, data=diamonds, ax=ax, palette='viridis', order=['Fair', 'Good', 'Very Good', 'Premium', 'Ideal'])
+            ax.grid(axis='y', linestyle='--', linewidth=0.7, alpha=0.7, which='major')
+        #sorting the 'color' feature by quality
+        elif feature == 'color':
+            sns.countplot(x=feature, data=diamonds, ax=ax, palette='viridis', order=['D-Colorless', 'E-Colorless', 'F-Colorless', 'G-Near Colorless', 'H-Near Colorless', 'I-Near Colorless', 'J-Near Colorless'])
+            ax.grid(axis='y', linestyle='--', linewidth=0.7, alpha=0.7, which='major')
+        #sorting the 'clarity' feature by quality
+        elif feature == 'clarity':
+            sns.countplot(x=feature, data=diamonds, ax=ax, palette='viridis', order=['Included', 'Slightly Included', 'Very Slightly Included', 'Very Very Slightly Included-2', 'Very Very Slightly Included-1', 'Internally Flawless'])
+            ax.grid(axis='y', linestyle='--', linewidth=0.7, alpha=0.7, which='major')
+        else:
+            sns.countplot(x=feature, data=diamonds, ax=ax, palette='viridis')
+            ax.grid(axis='y', linestyle='--', linewidth=0.7, alpha=0.7, which='major')
+        
+    ax.set_xlabel(feature)
+    ax.set_ylabel('Nr of Diamonds')
+    ax.set_title(f'Distribution of Diamond {feature}')
+
+plt.tight_layout()
+plt.show()
+
+#remove empty plots
+axes[-1].remove()
+axes[-2].remove()
+axes[-3].remove()
+
+#add title
+fig.suptitle('Distribution of Diamond Features', fontsize=16)
+
+plt.tight_layout()
+plt.show()
+
 #checking distributions of numeric features
 #lets make the price labels more readable by adding more markers on the plot using seaborn
-
-sns.histplot(diamonds['price'], bins=50)
-plt.grid(axis='y', linestyle='--', linewidth=0.7, alpha=0.7)
-mean_val = diamonds['price'].mean() # calculate mean value
-plt.axvline(mean_val, color='r', linestyle='--')
-plt.text(15000, 3000, 'Mean: {:.2f}'.format(mean_val), bbox=dict(facecolor='red', alpha=0.5)) # include mean value in the plot
-plt.xlabel('Price ($)')
-plt.ylabel('Nr of Diamonds')
-plt.title('Distribution of Diamond Prices')
-plt.show()
-
-
-#histogram of carat
-sns.histplot(diamonds['carat'], bins=50)
-plt.grid(axis='y', linestyle='--', linewidth=0.7, alpha=0.7)
-mean_val = diamonds['carat'].mean() # calculate mean value
-plt.axvline(mean_val, color='r', linestyle='--')
-plt.text(3, 3000, 'Mean: {:.2f}'.format(mean_val), bbox=dict(facecolor='red', alpha=0.5)) # include mean value in the plot
-plt.xlabel('Carat')
-plt.ylabel('Nr of Diamonds')
-plt.title('Distribution of Diamond Carats')
-plt.show()
-
 #there are some outliers in the carat feature. we can remove them by removing the rows with carat > 3
 #diamonds = diamonds[diamonds['carat'] < 3]
 #But considering we're dealing with luxury products, it's not surprising to have some outliers representing rare cases. so we'll keep them.
 #in linear regression, outliers can affect the model's performance. so we'll apply random forest regressor instead later on.
 
+# I wonder why depth follows a normal distribution. 
+# I think this is because the depth is the height of the diamond, which is the z divided by the average of x and y.
 
-#distribution of depth
-sns.histplot(diamonds['depth'], bins=50, color='skyblue', kde=True)
-plt.grid(axis='y', linestyle='--', linewidth=0.7, alpha=0.7)
-mean_val = diamonds['depth'].mean() # calculate mean value
-print("Mean_val type:", type(mean_val))
-print("Mean_val value:", mean_val)
-plt.axvline(mean_val, color='r', linestyle='--')
-plt.text(62, 3000, 'Mean: {:.2f}'.format(mean_val), bbox=dict(facecolor='red', alpha=0.5)) # include mean value in the plot
-plt.xlabel('Depth of Diamonds')
-plt.ylabel('Nr of Diamonds')
-plt.title('Distribution of Diamond Depths')
-plt.show()
-
-
-#distribution of table
-sns.histplot(diamonds['table'], bins=35)
-plt.xticks(np.arange(40, 70, step=5))  # steps of 5
-plt.yticks(np.arange(0, 20000, step=3000))
-plt.xlabel('Table')
-plt.ylabel('Nr of Diamonds')
-plt.show()
-
-#distribution of cut
-sns.histplot(diamonds['cut'], bins=50)
-plt.xticks(np.arange(0, 6, step=1))  # steps of 1
-plt.yticks(np.arange(0, 25000, step=5000))
-plt.xlabel('Cut')
-plt.ylabel('Nr of Diamonds')
-plt.show()
-
-#distribution of clarity
-sns.histplot(diamonds['clarity'], bins=50)
-plt.xticks(np.arange(0, 9, step=1))  # steps of 1
-plt.yticks(np.arange(0, 15000, step=3000))
-plt.xlabel('Clarity')
-plt.ylabel('Nr of Diamonds')
-plt.show()
-
-#distribution of color
-sns.histplot(diamonds['color'], bins=50)
-plt.xticks(np.arange(0, 8, step=1))  # steps of 1
-plt.yticks(np.arange(0, 15000, step=1500))
-plt.xlabel('Color')
-plt.ylabel('Nr of Diamonds')
-plt.show()
-
+#table is the width of the diamond's table expressed as a percentage of its average diameter.\
 
 #checking unique combinations 
 print(diamonds.groupby(['cut', 'color', 'clarity']).size())
