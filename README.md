@@ -16,3 +16,10 @@ Successfully loaded and preprocessed the diamonds dataset, including handling ca
 Performed initial exploratory data analysis to understand feature distributions and identify potential outliers.
 Engineered new features such as volume and density to enrich the dataset for predictive modeling.
 Visualized key aspects of the data to uncover underlying patterns and relationships.
+
+Technologies & Tools:
+
+Programming Languages: Python
+Libraries & Tools: Pandas, NumPy, Seaborn, Matplotlib
+Development Environment: Jupyter Notebook, VSCode
+Version Control: Git & GitHub
