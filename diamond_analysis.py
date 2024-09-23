@@ -160,7 +160,6 @@ plt.show()
 #in linear regression, outliers can affect the model's performance. so we'll apply random forest regressor instead later on.
 
 
-
 #checking unique combinations 
 print(diamonds.groupby(['cut', 'color', 'clarity']).size())
 
