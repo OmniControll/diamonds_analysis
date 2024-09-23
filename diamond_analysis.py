@@ -150,16 +150,14 @@ plt.tight_layout()
 plt.show()
 
 #checking distributions of numeric features
+# the depth is the height of the diamond, which is the z divided by the average of x and y.
+#table is the width of the diamond's table expressed as a percentage of its average diameter.\
 #lets make the price labels more readable by adding more markers on the plot using seaborn
 #there are some outliers in the carat feature. we can remove them by removing the rows with carat > 3
 #diamonds = diamonds[diamonds['carat'] < 3]
 #But considering we're dealing with luxury products, it's not surprising to have some outliers representing rare cases. so we'll keep them.
 #in linear regression, outliers can affect the model's performance. so we'll apply random forest regressor instead later on.
 
-# I wonder why depth follows a normal distribution. 
-# I think this is because the depth is the height of the diamond, which is the z divided by the average of x and y.
-
-#table is the width of the diamond's table expressed as a percentage of its average diameter.\
 
 #checking unique combinations 
 print(diamonds.groupby(['cut', 'color', 'clarity']).size())
