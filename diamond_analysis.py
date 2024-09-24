@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+from IPython.display import display
 
 # Read data
 
@@ -10,7 +11,7 @@ diamonds = pd.read_csv('diamonds.csv')
 # turn to pandas dataframe
 diamonds = pd.DataFrame(diamonds)
 # info
-print(diamonds.info())
+display(diamonds.info())
 
 # some of our columns contain byte strings, we'll need to convert them to strings.
 # we'll also need to convert the categorical features to strings.
@@ -49,25 +50,25 @@ diamonds['clarity'] = diamonds['clarity'].str.replace("'", '')
 # we can also use the dimensions to calculate the density of the diamond and use that as a feature.
 
 #explore
-print(diamonds.head())
-print(diamonds.info())
-print(diamonds.describe())
+display(diamonds.head())
+display(diamonds.info())
+display(diamonds.describe())
 
 #our data has 53940 rows and 11 columns. so 53940 diamonds with 11 features.
 #our most expensive diamond is 18,823 dollars and our cheapest diamond is 326 dollars.
 #our largest diamond is 5.01 carats and our smallest diamond is 0.2 carats.
 
 #check for nulls
-print(diamonds.isnull().sum())
+display(diamonds.isnull().sum())
 
 # we're going to need to clean the data a bit before we can use it.
 # we'll rename some columns to make them more readable.
 #rename columns
 diamonds.rename(columns={"'x'": 'length', "'y'": 'width', "'z'": 'height'}, inplace=True)
-print(diamonds.head())
+display(diamonds.head())
 
-print(diamonds['clarity'].unique())
-print(diamonds['color'].unique())
+display(diamonds['clarity'].unique())
+display(diamonds['color'].unique())
 
 # rename the clarity values to make them more readable
 diamonds['clarity'] = diamonds['clarity'].astype(str)
@@ -83,8 +84,8 @@ diamonds['color'] = diamonds['color'].astype(str)
 diamonds['color'].replace({'D': 'D-Colorless', 'E': 'E-Colorless', 'F': 'F-Colorless',
                             'G': 'G-Near Colorless', 'H': 'H-Near Colorless', 'I': 'I-Near Colorless', 'J': 'J-Near Colorless'}, inplace=True)
 
-print(diamonds['clarity'].unique())
-print(diamonds['color'].unique())
+display(diamonds['clarity'].unique())
+display(diamonds['color'].unique())
 
 diamonds.head()
 
@@ -160,9 +161,9 @@ plt.show()
 
 
 #checking unique combinations 
-print(diamonds.groupby(['cut', 'color', 'clarity']).size())
+display(diamonds.groupby(['cut', 'color', 'clarity']).size())
 
 # 276 unique combinations, this implies that we have 276 different types of diamonds in our data.
 
-print(diamonds.groupby(['color', 'clarity']).size().sort_values(ascending=False)) 
+display(diamonds.groupby(['color', 'clarity']).size().sort_values(ascending=False)) 
 # the most common diamond is a G-Near Colorless with a clarity of Slightly Included.
