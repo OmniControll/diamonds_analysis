@@ -3,10 +3,17 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from IPython.display import display
+from dotenv import load_dotenv
+import os
+
+# Load environment variables
+load_dotenv()
+
+# Path to the dataset
+folder_path = os.getenv("DIAMONDS_PATH")
 
 # Read data
-
-diamonds = pd.read_csv('diamonds.csv')
+diamonds = pd.read_csv(folder_path)
 
 # turn to pandas dataframe
 diamonds = pd.DataFrame(diamonds)
